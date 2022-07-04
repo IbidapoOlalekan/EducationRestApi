@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
+
 @RestController
 @RequestMapping("api/v1/EducationApi")
 public class StudentController {
@@ -26,10 +28,10 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/findStudents")
-    public ResponseEntity<?> findStudent(@PathVariable String id){
+    @GetMapping("/findStudents/{rollNo}")
+    public ResponseEntity<?> findStudent(@PathParam("rollNo") String rollNo){
         try {
-            return new ResponseEntity<>(studentService.findStudent(id), HttpStatus.FOUND);
+            return new ResponseEntity<>(studentService.findStudent(rollNo), HttpStatus.FOUND);
         }
         catch(StudentException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

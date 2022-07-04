@@ -9,5 +9,5 @@ public interface StudentService {
     StudentDTO findStudent(String id);
 
     String updateStudent(UpdateStudentForm updateForm);
-    void deleteByRollNo(String s);
+    void deleteByRollNo(String rollNo);
 }
