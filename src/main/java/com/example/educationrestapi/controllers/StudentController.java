@@ -28,13 +28,4 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/findStudents/{rollNo}")
-    public ResponseEntity<?> findStudent(@PathParam("rollNo") String rollNo){
-        try {
-            return new ResponseEntity<>(studentService.findStudent(rollNo), HttpStatus.FOUND);
-        }
-        catch(StudentException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
 }
