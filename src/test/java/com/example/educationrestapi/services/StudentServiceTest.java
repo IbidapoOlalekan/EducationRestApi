@@ -3,22 +3,27 @@ package com.example.educationrestapi.services;
 import com.example.educationrestapi.dtos.requests.CreateStudentRequest;
 import com.example.educationrestapi.dtos.responses.StudentDTO;
 import com.example.educationrestapi.exceptions.StudentException;
-import org.junit.jupiter.api.AfterEach;
+import com.example.educationrestapi.models.Student;
+import com.example.educationrestapi.repositories.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 
 class StudentServiceTest {
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private StudentRepository studentRepository;
 
     private CreateStudentRequest requests;
 
@@ -63,10 +68,34 @@ class StudentServiceTest {
     @Test void testCanFindStudent(){
         StudentDTO studentDTO = studentService.createAccount(requests);
         StudentDTO studentFromDb = studentService.
-                findUser(studentDTO.getRollNo());
+                findStudent(studentDTO.getRollNo());
         assertThat(studentDTO.getRollNo()).isEqualTo(studentFromDb.getRollNo());
 
     }
+
+    @Test
+    @DisplayName("When you try to find a student account with an email that does not  exist in DB," +
+            "The find student account service should throw a StudentException with the message: student" +
+            " does not exist")
+    void thatTestThrowsStudentExceptionExceptionWhenStudentFoundDoesNotExists(){
+        studentService.createAccount(requests);
+        assertThatThrownBy(()-> studentService.findStudent("12"))
+                .isInstanceOf(StudentException.class)
+                .hasMessage("Student does not exist");
+    }
+
+    @DisplayName("Delete a student with roll no Test")
+    @Test void deleteStudentTest(){
+        StudentDTO studentDTO = studentService.createAccount(requests);
+        StudentDTO student = studentService.findStudent(studentDTO.getRollNo());
+        studentService.deleteByRollNo(studentDTO.getRollNo());
+        Optional<Student> studentFromDb = studentRepository.findStudentByRollNo(student.getRollNo());
+        assertThat(studentFromDb).isNotPresent();
+    }
+
+
+
+
 //@AfterEach
 //void tearDown() {
 //    studentService.deleteByRollNo("10");

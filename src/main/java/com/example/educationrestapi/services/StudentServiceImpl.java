@@ -1,6 +1,7 @@
 package com.example.educationrestapi.services;
 
 import com.example.educationrestapi.dtos.requests.CreateStudentRequest;
+import com.example.educationrestapi.dtos.requests.UpdateStudentForm;
 import com.example.educationrestapi.dtos.responses.StudentDTO;
 import com.example.educationrestapi.exceptions.StudentException;
 import com.example.educationrestapi.models.Student;
@@ -44,15 +45,24 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public StudentDTO findUser(String id) {
-        log.info(String.valueOf(studentRepository.findById(id)));
+    public StudentDTO findStudent(String id) {
         Student student = studentRepository.findById(id).orElseThrow(()->new StudentException("Student does not exist"));
         return modelmapper.map(student,StudentDTO.class);
     }
 
     @Override
+    public String updateStudent(UpdateStudentForm updateForm) {
+        Student student = studentRepository.findById(updateForm.getRollNo()).orElseThrow(()-> new StudentException("Student does not exist"));
+        if (!(updateForm.getRollNo().trim().equals("") || updateForm.getRollNo()==null)){
+            student.setRollNo(updateForm.getRollNo());
+            studentRepository.save(student);
+        }
+        return "Student roll number have been updated";
+    }
+
+    @Override
     public void deleteByRollNo(String id) {
-        Student student = studentRepository.findById(id).orElseThrow(()->new StudentException("User with Roll No not found"));
+        Student student = studentRepository.findById(id).orElseThrow(()->new StudentException("Student with roll no not found"));
         studentRepository.delete(student);
     }
 }
