@@ -5,6 +5,7 @@ import com.example.educationrestapi.dtos.responses.StudentDTO;
 import com.example.educationrestapi.exceptions.StudentException;
 import com.example.educationrestapi.models.Student;
 import com.example.educationrestapi.repositories.StudentRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -84,20 +85,12 @@ class StudentServiceTest {
                 .hasMessage("Student does not exist");
     }
 
-    @DisplayName("Delete a student with roll no Test")
-    @Test void deleteStudentTest(){
-        StudentDTO studentDTO = studentService.createAccount(requests);
-        StudentDTO student = studentService.findStudent(studentDTO.getRollNo());
-        studentService.deleteByRollNo(studentDTO.getRollNo());
-        Optional<Student> studentFromDb = studentRepository.findStudentByRollNo(student.getRollNo());
-        assertThat(studentFromDb).isNotPresent();
-    }
 
 
 
 
-//@AfterEach
-//void tearDown() {
-//    studentService.deleteByRollNo("10");
-//}
+@AfterEach
+void tearDown() {
+    studentService.deleteByRollNo("10");
+}
 }
