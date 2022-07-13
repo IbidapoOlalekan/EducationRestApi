@@ -54,7 +54,7 @@ public class StudentServiceImpl implements StudentService{
     public String updateStudent(UpdateStudentForm updateForm) {
         Student student = studentRepository.findById(updateForm.getRollNo()).orElseThrow(()-> new StudentException("Student does not exist"));
         if (!(updateForm.getRollNo().trim().equals("") || updateForm.getRollNo()==null)){
-            student.setRollNo(updateForm.getRollNo());
+            student.setRollNo(updateForm.getNewRollNo());
             studentRepository.save(student);
         }
         return "Student roll number have been updated";
