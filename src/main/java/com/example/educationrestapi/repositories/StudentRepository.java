@@ -12,7 +12,7 @@ public interface StudentRepository extends MongoRepository<Student,String> {
 
     Optional<Student> findStudentByRollNo(String rollNo);
 
-    Student findStudentByRollNoOrFirstName(String rollNo);
+    Optional<Student> findStudentByFirstName(String firstName);
 
 
 }

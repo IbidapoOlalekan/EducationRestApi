@@ -1,6 +1,7 @@
 package com.example.educationrestapi.controllers;
 
 import com.example.educationrestapi.dtos.requests.CreateStudentRequest;
+import com.example.educationrestapi.dtos.requests.UpdateStudentForm;
 import com.example.educationrestapi.exceptions.StudentException;
 import com.example.educationrestapi.services.StudentService;
 import org.springframework.http.HttpStatus;
@@ -27,5 +28,17 @@ public class StudentController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PatchMapping("/updateAccount")
+    public ResponseEntity<?> updateAccount(@RequestBody UpdateStudentForm updateForm){
+        try {
+            return new ResponseEntity<>(studentService.updateStudent(updateForm),HttpStatus.OK);
+        }
+        catch(StudentException ex){
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 
 }
